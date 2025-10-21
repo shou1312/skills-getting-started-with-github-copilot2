@@ -38,9 +38,44 @@ activities = {
         "schedule": "Mondays, Wednesdays, Fridays, 2:00 PM - 3:00 PM",
         "max_participants": 30,
         "participants": ["john@mergington.edu", "olivia@mergington.edu"]
+    },
+    "Soccer Team": {
+        "description": "Competitive soccer practices and matches",
+        "schedule": "Mondays, Wednesdays, 4:00 PM - 6:00 PM",
+        "max_participants": 22,
+        "participants": ["liam@mergington.edu", "ava@mergington.edu"]
+    },
+    "Basketball Team": {
+        "description": "Team basketball training and intramural games",
+        "schedule": "Tuesdays, Thursdays, 5:00 PM - 7:00 PM",
+        "max_participants": 15,
+        "participants": ["noah@mergington.edu", "isabella@mergington.edu"]
+    },
+    "Art Club": {
+        "description": "Explore visual arts, painting, and drawing",
+        "schedule": "Wednesdays, 3:30 PM - 5:00 PM",
+        "max_participants": 18,
+        "participants": ["sophia.k@mergington.edu", "lucas@mergington.edu"]
+    },
+    "Drama Club": {
+        "description": "Acting workshops, rehearsals, and theater productions",
+        "schedule": "Fridays, 4:00 PM - 6:00 PM",
+        "max_participants": 25,
+        "participants": ["mia@mergington.edu", "ethan@mergington.edu"]
+    },
+    "Debate Team": {
+        "description": "Practice formal debate, public speaking, and competitions",
+        "schedule": "Tuesdays, 4:00 PM - 5:30 PM",
+        "max_participants": 16,
+        "participants": ["aaron@mergington.edu", "nora@mergington.edu"]
+    },
+    "Science Club": {
+        "description": "Hands-on experiments, science fairs, and STEM projects",
+        "schedule": "Thursdays, 3:30 PM - 5:00 PM",
+        "max_participants": 20,
+        "participants": ["zoe@mergington.edu", "li@mergington.edu"]
     }
 }
-
 
 @app.get("/")
 def root():
@@ -50,6 +85,7 @@ def root():
 @app.get("/activities")
 def get_activities():
     return activities
+
 
 
 @app.post("/activities/{activity_name}/signup")
@@ -65,3 +101,13 @@ def signup_for_activity(activity_name: str, email: str):
     # Add student
     activity["participants"].append(email)
     return {"message": f"Signed up {email} for {activity_name}"}
+# Validate student is not already signed up
+    if email in activity["participants"]:
+        raise HTTPException(status_code=400, detail="Student already signed up for this activity")
+    # Validate activity is not full
+    if len(activity["participants"]) >= activity["max_participants"]:
+        raise HTTPException(status_code=400, detail="Activity is full")
+    # Add student
+    activity["participants"].append(email)
+    return {"message": f"Signed up {email} for {activity_name}"}  
+  
